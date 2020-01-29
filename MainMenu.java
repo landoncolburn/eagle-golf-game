@@ -14,17 +14,14 @@ public class MainMenu extends GameObject{
   private int count = 0;
 
   public MainMenu(){
-    super(0, 0);
+    super(0, 0, ID.SCREEN);
     logo = Game.gameInstance.bil.loadImage("assets/GameLogo.png");
     background = Game.gameInstance.bil.loadImage("assets/menuBackground.jpg");
     menu = this;
   }
 
   public void tick(){
-    if(count == 0){
-      Game.gameInstance.handler.addObject(new Button(Game.gameInstance.size.width/2-150, 400));
-      count++;
-    }
+
   }
 
   public Rectangle getBounds(){return null;}

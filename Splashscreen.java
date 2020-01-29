@@ -8,7 +8,7 @@ public class Splashscreen extends GameObject{
   int count = 0;
 
   public Splashscreen(){
-    super(0, 0);
+    super(0, 0, ID.SCREEN);
     for(int i = 0; i<10; i++){
       studioLogo[i] = Game.gameInstance.bil.loadImage("assets/studio/GameDesignLogo"+i+".png");
     }
@@ -31,6 +31,7 @@ public class Splashscreen extends GameObject{
       activeLogo = null;
     } else if(count>300){
       Game.gameInstance.handler.addObject(new MainMenu());
+      Game.gameInstance.handler.addObject(new Button(Game.gameInstance.size.width/2-150, 400));
       Game.gameInstance.handler.removeObject(this);
     }
   }

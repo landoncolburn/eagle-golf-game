@@ -8,13 +8,17 @@ public class Game extends Canvas implements Runnable {
 
   public static Game gameInstance;
   public Handler handler;
-  private boolean isRunning = false;
-  private Thread thread;
-  public Dimension size = new Dimension(1000, 600);
+
   private BufferedImage studioLogo;
+  private Thread thread;
+  private boolean isRunning = false;
+
   public BufferedImageLoader bil = new BufferedImageLoader();
+  public Dimension size = new Dimension(1000, 600);
   public MouseMotionInput mmi;
   public MouseInput mi;
+
+  public final double GRAVITY = 0.3;
 
   public Game(){
     new Window("Game", size, this);
@@ -30,6 +34,7 @@ public class Game extends Canvas implements Runnable {
 
     this.addMouseListener(mi);
     this.addMouseMotionListener(mmi);
+    this.addKeyListener(new KeyInput(handler));
   }
 
   public void start(){
@@ -48,7 +53,7 @@ public class Game extends Canvas implements Runnable {
   }
 
   @Override
-  public void run(){
+  public void run() {
     this.requestFocus();
     long lastTime = System.nanoTime();
     double amountOfTicks = 60.0;
@@ -64,11 +69,20 @@ public class Game extends Canvas implements Runnable {
         tick();
         delta--;
       }
-      render();
+      if (isRunning)
+        render();
       frames++;
       if (System.currentTimeMillis() - timer > 1000) {
         timer += 1000;
+        System.out.println("FPS: " + frames);
         frames = 0;
+      }
+      long endTime = System.nanoTime();
+      long elapsedTime = endTime - now;
+      try {
+        Thread.sleep((Math.abs((long) 16666666 - elapsedTime)) / 1000000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
     }
     stop();
@@ -97,6 +111,12 @@ public class Game extends Canvas implements Runnable {
 
   public void tick(){
     handler.tick();
+  }
+
+  public void startGame(){
+    handler.addObject(new Ball(100, 100));
+    handler.addObject(new Ground(10, 400, 800, 20));
+    handler.addObject(new Ground(400, 10, 20, 800));
   }
 
   public static void main(String[] args) {
