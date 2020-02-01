@@ -117,9 +117,10 @@ public class Game extends Canvas implements Runnable {
 
   public void startGame(){
     background = new Color(160, 240, 240);
+    handler.addObject(new Ground(0, 500, 1000, 100));
+    handler.addObject(new Wall(900, 0, 100, 800));
+    handler.addObject(new Wall(0, 0, 100, 800));
     handler.addObject(new Ball(500, 100));
-    handler.addObject(new Ground(10, 400, 800, 300));
-    handler.addObject(new Wall(800, 10, 20, 800));
   }
 
   public static void main(String[] args) {

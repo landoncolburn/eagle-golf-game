@@ -39,7 +39,10 @@ public class Splashscreen extends GameObject{
   public Rectangle getBounds(){return null;}
 
   public void render(Graphics g){
-    g.drawImage(activeLogo, Game.gameInstance.size.width/2-150, Game.gameInstance.size.height/2-45, null);
+    Graphics2D g2 = (Graphics2D)g;
+    g2.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+    g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+    g2.drawImage(activeLogo, Game.gameInstance.size.width/2-150, Game.gameInstance.size.height/2-45, null);
   }
 
 }

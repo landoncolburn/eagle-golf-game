@@ -6,10 +6,13 @@ public class Ball extends GameObject{
   private BufferedImage sprite = null;
 
   private Vector2 forces = new Vector2();
-  private double angle = Math.PI;
+  public double angle = 0;
   private boolean freefall = false;
   private int i = -10;
-  private int magnitude = 25;
+  public int magnitude = 25;
+
+  public int maxStrength = 90;
+  public int minStrength = 25;
 
   private Rectangle wallArea;
   private Rectangle floorArea;
@@ -20,6 +23,7 @@ public class Ball extends GameObject{
   public Ball(int x, int y){
     super(x, y, ID.BALL);
     sprite = Game.gameInstance.bil.loadImage("assets/ball.png");
+    Game.gameInstance.handler.addObject(new StrengthMeter(x, y, this));
   }
 
   public void tick(){
@@ -58,6 +62,9 @@ public class Ball extends GameObject{
     } else {
       forces.setY(0);
       forces.setX(forces.getX()*0.9);
+      if(jumpDelay<0){
+        StrengthMeter.show();
+      }
     }
 
     //Handles friction
@@ -75,7 +82,9 @@ public class Ball extends GameObject{
   }
 
   public void render(Graphics g){
-    g.drawImage(sprite, (int)x, (int)y, 20, 20, null);
+    Graphics2D g2 = (Graphics2D)g;
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    g2.drawImage(sprite, (int)x, (int)y, 20, 20, null);
     if(Handler.DEBUG){
       g.setColor(Color.RED);
       g.drawLine(getX()+10, getY()+10, (int)(getX()+10+-Math.cos(angle)*magnitude), (int)(getY()+10+-Math.sin(angle)*magnitude));
@@ -87,6 +96,7 @@ public class Ball extends GameObject{
     if(Game.gameInstance.handler.getKey(4) && jumpDelay <= 0){
       forces.addAtAngle(-magnitude/5, angle);
       jumpDelay = 100;
+      StrengthMeter.hide();
     }
 
     if(Game.gameInstance.handler.getKey(1)){
@@ -95,9 +105,9 @@ public class Ball extends GameObject{
       angle+=0.03;
     }
 
-    if(Game.gameInstance.handler.getKey(0) && magnitude<75){
+    if(Game.gameInstance.handler.getKey(0) && magnitude<maxStrength){
       magnitude += 1;
-    } else if(Game.gameInstance.handler.getKey(2) && magnitude>25){
+    } else if(Game.gameInstance.handler.getKey(2) && magnitude>minStrength){
       magnitude += -1;
     }
   }
