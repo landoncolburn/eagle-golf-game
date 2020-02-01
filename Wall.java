@@ -1,13 +1,13 @@
 import java.awt.*;
 import java.awt.image.*;
 
-public class Ground extends GameObject{
+public class Wall extends GameObject{
 
   private BufferedImage sprite = null;
   private int w,h;
 
-  public Ground(int x, int y, int w, int h){
-    super(x, y, ID.GROUND);
+  public Wall(int x, int y, int w, int h){
+    super(x, y, ID.WALL);
     this.w = w;
     this.h = h;
   }
@@ -17,7 +17,7 @@ public class Ground extends GameObject{
   }
 
   public void render(Graphics g){
-    g.setColor(new Color(108, 215, 95));
+    g.setColor(new Color(140, 140, 140));
     g.fillRect(getX(), getY(), w, h);
   }
 

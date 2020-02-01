@@ -3,13 +3,16 @@ import java.awt.*;
 
 public class Handler {
 
+  public static boolean DEBUG = false;
+
   private LinkedList<GameObject> gameObjects;
   private boolean[] keys = {
     false, //W
     false, //A
     false, //S
     false, //D
-    false //Space
+    false, //Space
+    false //F3
   };
 
   public Handler(){
@@ -40,16 +43,15 @@ public class Handler {
     }
   }
 
-  public Rectangle checkCollision(GameObject ball){
+  public LinkedList<Collision> checkCollision(GameObject ball){
+    LinkedList<Collision> collisions = new LinkedList<Collision>();
     for(int i = 0; i<gameObjects.size(); i++){
       GameObject tempObject = gameObjects.get(i);
-      if(tempObject.getID().equals(ID.GROUND)){
-        if(tempObject.getBounds().intersects(ball.getBounds())){
-          return tempObject.getBounds().intersection(ball.getBounds());
-        }
+      if(ball.getBounds().intersects(tempObject.getBounds()) && tempObject != ball){
+        collisions.add(new Collision(tempObject, ball.getBounds().intersection(tempObject.getBounds())));
       }
     }
-    return null;
+    return collisions;
   }
 
   public void setKey(int i, boolean b){

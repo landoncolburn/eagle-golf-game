@@ -26,5 +26,6 @@ public class KeyInput extends KeyAdapter {
     if(key == KeyEvent.VK_S) handler.setKey(2, false);
     if(key == KeyEvent.VK_A) handler.setKey(1, false);
     if(key == KeyEvent.VK_SPACE) handler.setKey(4, false);
+    if(key == KeyEvent.VK_F3) Handler.DEBUG = !Handler.DEBUG;
   }
 }

@@ -1,5 +1,6 @@
 public enum ID {
   BALL,
   SCREEN,
-  GROUND;
+  GROUND,
+  WALL;
 }

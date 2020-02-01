@@ -20,6 +20,8 @@ public class Game extends Canvas implements Runnable {
 
   public final double GRAVITY = 0.3;
 
+  public Color background = new Color(50, 50, 50);
+
   public Game(){
     new Window("Game", size, this);
     start();
@@ -99,7 +101,7 @@ public class Game extends Canvas implements Runnable {
     ///////----DRAW IN HERE----///////
     //////////////////////////////////
 
-    g.setColor(new Color(50, 50, 50));
+    g.setColor(background);
     g.fillRect(0, 0, size.width, size.height);
 
     handler.render(g);
@@ -114,9 +116,10 @@ public class Game extends Canvas implements Runnable {
   }
 
   public void startGame(){
-    handler.addObject(new Ball(100, 100));
-    handler.addObject(new Ground(10, 400, 800, 20));
-    handler.addObject(new Ground(400, 10, 20, 800));
+    background = new Color(160, 240, 240);
+    handler.addObject(new Ball(500, 100));
+    handler.addObject(new Ground(10, 400, 800, 300));
+    handler.addObject(new Wall(800, 10, 20, 800));
   }
 
   public static void main(String[] args) {
