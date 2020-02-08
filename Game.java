@@ -12,6 +12,7 @@ public class Game extends Canvas implements Runnable {
   private BufferedImage studioLogo;
   private Thread thread;
   private boolean isRunning = false;
+  public int fps = 0;
 
   public BufferedImageLoader bil = new BufferedImageLoader();
   public Dimension size = new Dimension(1000, 600);
@@ -22,13 +23,13 @@ public class Game extends Canvas implements Runnable {
 
   public Color background = new Color(50, 50, 50);
 
+  public boolean DEBUG = false;
+
   public Game(){
-    new Window("Game", size, this);
-    start();
+    gameInstance = this;
+    new Window("Game", size, gameInstance);
 
     handler = new Handler();
-    gameInstance = this;
-
     mmi = new MouseMotionInput(handler);
     mi = new MouseInput(handler);
 
@@ -37,6 +38,8 @@ public class Game extends Canvas implements Runnable {
     this.addMouseListener(mi);
     this.addMouseMotionListener(mmi);
     this.addKeyListener(new KeyInput(handler));
+
+    start();
   }
 
   public void start(){
@@ -63,7 +66,7 @@ public class Game extends Canvas implements Runnable {
     double delta = 0;
     long timer = System.currentTimeMillis();
     int frames = 0;
-    while (isRunning) {
+    while(isRunning) {
       long now = System.nanoTime();
       delta += (now - lastTime) / ns;
       lastTime = now;
@@ -71,12 +74,13 @@ public class Game extends Canvas implements Runnable {
         tick();
         delta--;
       }
-      if (isRunning)
+      if(isRunning)
         render();
       frames++;
-      if (System.currentTimeMillis() - timer > 1000) {
+      if(System.currentTimeMillis() - timer > 1000) {
         timer += 1000;
         System.out.println("FPS: " + frames);
+        fps = frames;
         frames = 0;
       }
       long endTime = System.nanoTime();
@@ -117,10 +121,12 @@ public class Game extends Canvas implements Runnable {
 
   public void startGame(){
     background = new Color(160, 240, 240);
-    handler.addObject(new Ground(0, 500, 1000, 100));
-    handler.addObject(new Wall(900, 0, 100, 800));
-    handler.addObject(new Wall(0, 0, 100, 800));
-    handler.addObject(new Ball(500, 100));
+    handler.addObject(new Wall(0, size.height-100, size.width, 100));
+    handler.addObject(new Wall(0, 0, size.width, 100));
+    handler.addObject(new Wall(0, 0, 100, size.height));
+    handler.addObject(new Wall(size.width-100, 0, 100, size.height));
+    handler.addObject(new Ball(500, 200));
+
   }
 
   public static void main(String[] args) {

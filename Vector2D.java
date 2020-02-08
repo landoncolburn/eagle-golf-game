@@ -1,4 +1,4 @@
-public class Vector2 {
+public class Vector2D {
 
     // Variables
     /**
@@ -15,7 +15,7 @@ public class Vector2 {
     /**
      * Default Vector Constructor
      */
-    public Vector2() {
+    public Vector2D() {
         this.x = 0;
         this.y = 0;
     }
@@ -25,7 +25,7 @@ public class Vector2 {
      *
      * @param v default vector2 value
      */
-    public Vector2(Vector2 v) {
+    public Vector2D(Vector2D v) {
         this.x = v.x;
         this.y = v.y;
     }
@@ -36,7 +36,7 @@ public class Vector2 {
      * @param x default x value
      * @param y default y value
      */
-    public Vector2(double x, double y) {
+    public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -104,7 +104,7 @@ public class Vector2 {
      *
      * @param v new vector2 value
      */
-    public void set(Vector2 v) {
+    public void set(Vector2D v) {
         this.x = v.x;
         this.y = v.y;
     }
@@ -136,10 +136,10 @@ public class Vector2 {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Vector2)) {
+        if (obj == null || !(obj instanceof Vector2D)) {
             return false;
         }
-        Vector2 v = (Vector2) obj;
+        Vector2D v = (Vector2D) obj;
         return v.x == this.x && v.y == this.y;
     }
 

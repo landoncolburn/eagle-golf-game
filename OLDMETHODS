@@ -1,0 +1,51 @@
+public void tick(){
+
+  collisionArea = new Rectangle(0, 0, 0, 0);
+
+  //Checks collision boundaries
+  Game.gameInstance.handler.checkCollision(this).forEach((c)->{
+    if(c.getObject().getID()==ID.WALL){
+      collisionArea = c.getBounds();
+    }
+  });
+
+  if(collisionArea!=null){
+    if(collisionArea.contains(getX(), getY(), 20, 1)){ //Top
+      touching[0] = true;
+    } else {
+      touching[0] = false;
+    }
+    if(collisionArea.contains(getX()+18, getY(), 1, 20)){ //Right
+      touching[1] = true;
+    } else {
+      touching[1] = false;
+    }
+    if(collisionArea.contains(getX(), getY()+18, 20, 1)){ //Bottom
+      touching[2] = true;
+    } else {
+      touching[2] = false;
+    }
+    if(collisionArea.contains(getX(), getY(), 1, 20)){ //Left
+      touching[3] = true;
+    } else {
+      touching[3] = false;
+    }
+  }
+
+  if(!touching[2]){
+    forces.addY(0.3);
+  } else {
+    forces.setY(0);
+  }
+
+  if(touching[0]) y+=collisionArea.getHeight()+2; //TOP
+  if(touching[1]) x-=collisionArea.getWidth()-2; //RIGHT
+  if(touching[2]) y-=collisionArea.getHeight()-2; //BOTTOM
+  if(touching[3]) x+=collisionArea.getWidth()+2; //LEFT
+
+  inputHandler();
+
+  x+=forces.getX();
+  y+=forces.getY();
+
+}

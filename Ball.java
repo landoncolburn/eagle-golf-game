@@ -5,111 +5,105 @@ public class Ball extends GameObject{
 
   private BufferedImage sprite = null;
 
-  private Vector2 forces = new Vector2();
+  public Vector2D forces = new Vector2D();
   public double angle = 0;
-  private boolean freefall = false;
-  private int i = -10;
   public int magnitude = 25;
 
   public int maxStrength = 90;
   public int minStrength = 25;
 
-  private Rectangle wallArea;
-  private Rectangle floorArea;
+  private boolean jumpable = false;
+  public boolean grounded = false;
 
-  private int jumpDelay = 0;
+  private Handler handler;
 
-
+  //Constructor
   public Ball(int x, int y){
     super(x, y, ID.BALL);
     sprite = Game.gameInstance.bil.loadImage("assets/ball.png");
-    Game.gameInstance.handler.addObject(new StrengthMeter(x, y, this));
+    handler = Game.gameInstance.handler;
+    handler.addObject(new StrengthMeter(x, y, this));
   }
 
+  // Runs once each frame
   public void tick(){
-    wallArea = null;
-    floorArea = null;
+    // Gravity and Friction
+    forces.addY(0.3);
+    forces.setX(forces.getX()*0.995);
 
-    //Checks collision boundaries
-    Game.gameInstance.handler.checkCollision(this).forEach((c)->{
-      if(c.getObject().getID()==ID.WALL){
-        wallArea = c.getBounds();
-      }
-      if(c.getObject().getID()==ID.GROUND){
-        floorArea = c.getBounds();
-      }
-    });
+    // Bounds velocity to numbers greater than 0.01
+    if(forces.getY()<0.01 && forces.getY()>-0.01) forces.setY(0);
+    if(forces.getX()<0.01 && forces.getX()>-0.01) forces.setX(0);
 
-    //Hits ground
-    if(floorArea!=null && floorArea.getHeight()>1){
-      y-=floorArea.getHeight();
+    // Handles when to show StrengthMeter and allow next jump
+    if(forces.getX()==0&&forces.getY()==0){
+      StrengthMeter.show();
+      jumpable = true;
     }
 
-    //Hits wall
-    if(wallArea!=null && wallArea.getWidth()>1){
-      if(wallArea.contains(new Point(getX(), getY()))){
-        x+=wallArea.getWidth();
-      } else {
-        x-=wallArea.getWidth();
-      }
-      forces.setX(-forces.getX()/5);
-      forces.setY(forces.getY()*0.9);
-    }
-
-    //Handles gravity and forgivness
-    if(floorArea==null){
-      forces.addY(Game.gameInstance.GRAVITY);
-    } else {
-      forces.setY(0);
-      forces.setX(forces.getX()*0.9);
-      if(jumpDelay<0){
-        StrengthMeter.show();
-      }
-    }
-
-    //Handles friction
-    if(Math.abs(forces.getX())<0.01){
-      forces.setX(0);
-    }
-
+    // Runs tick based methods
+    handler.collision(this);
     inputHandler();
-
-    jumpDelay--;
-
-    x+=forces.getX();
-    y+=forces.getY();
-
+    move();
   }
 
+  // Draws all ball related graphics (and debug menu)
   public void render(Graphics g){
     Graphics2D g2 = (Graphics2D)g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g2.drawImage(sprite, (int)x, (int)y, 20, 20, null);
-    if(Handler.DEBUG){
+    if(Game.gameInstance.DEBUG){
+      // Angle and magnitude visual
       g.setColor(Color.RED);
       g.drawLine(getX()+10, getY()+10, (int)(getX()+10+-Math.cos(angle)*magnitude), (int)(getY()+10+-Math.sin(angle)*magnitude));
       g.drawRect(getX(), getY(), 20, 20);
+      // Ball Debug Menu
+      g.setColor(Color.WHITE);
+      g.drawString(("X: " + getX() + ", Y: " + getY()), 10, 40);
+      g.drawString(("Angle: " + angle + ", Magnitude: " + magnitude), 10, 60);
+      g.drawString(("Forces: ["+forces.getX()+", "+forces.getY()+"]"), 10, 80);
     }
   }
 
+
+  // Tick style method to change position based on velocity
+  public void move(){
+    x+=forces.getX();
+    y+=forces.getY();
+  }
+
+  // Handles all player based user input
   public void inputHandler(){
-    if(Game.gameInstance.handler.getKey(4) && jumpDelay <= 0){
+
+    // Handles jumping triggers
+    if(handler.getKey(4) == Key.UP && jumpable){
       forces.addAtAngle(-magnitude/5, angle);
-      jumpDelay = 100;
       StrengthMeter.hide();
+      jumpable = false;
     }
 
-    if(Game.gameInstance.handler.getKey(1)){
-      angle+=-0.03;
-    } else if(Game.gameInstance.handler.getKey(3)){
-      angle+=0.03;
+    // Handles rotation controls
+    if(handler.getKey(1) == Key.UP){
+      angle+=-Math.PI/100;
+    } else if(handler.getKey(3) == Key.UP){
+      angle+=Math.PI/100;
     }
 
-    if(Game.gameInstance.handler.getKey(0) && magnitude<maxStrength){
+    // Handles magnitude (strength) controls
+    if(handler.getKey(0) == Key.UP && magnitude<maxStrength){
       magnitude += 1;
-    } else if(Game.gameInstance.handler.getKey(2) && magnitude>minStrength){
+    } else if(handler.getKey(2) == Key.UP && magnitude>minStrength){
       magnitude += -1;
     }
+  }
+
+  // Getters and Setters
+  public void setX(int x){
+    this.x = x;
+  }
+
+  public void setY(int y){
+    this.y = y;
   }
 
   public Rectangle getBounds(){

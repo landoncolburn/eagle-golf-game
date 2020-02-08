@@ -12,20 +12,21 @@ public class KeyInput extends KeyAdapter {
 
   public void keyPressed(KeyEvent e){
     int key = e.getKeyCode();
-    if(key == KeyEvent.VK_W) handler.setKey(0, true);
-    if(key == KeyEvent.VK_D) handler.setKey(3, true);
-    if(key == KeyEvent.VK_S) handler.setKey(2, true);
-    if(key == KeyEvent.VK_A) handler.setKey(1, true);
-    if(key == KeyEvent.VK_SPACE) handler.setKey(4, true);
+    if(key == KeyEvent.VK_W) handler.setKey(0, Key.UP);
+    if(key == KeyEvent.VK_D) handler.setKey(3, Key.UP);
+    if(key == KeyEvent.VK_S) handler.setKey(2, Key.UP);
+    if(key == KeyEvent.VK_A) handler.setKey(1, Key.UP);
+    if(key == KeyEvent.VK_SPACE) handler.setKey(4, Key.UP);
   }
 
   public void keyReleased(KeyEvent e){
     int key = e.getKeyCode();
-    if(key == KeyEvent.VK_W) handler.setKey(0, false);
-    if(key == KeyEvent.VK_D) handler.setKey(3, false);
-    if(key == KeyEvent.VK_S) handler.setKey(2, false);
-    if(key == KeyEvent.VK_A) handler.setKey(1, false);
-    if(key == KeyEvent.VK_SPACE) handler.setKey(4, false);
-    if(key == KeyEvent.VK_F3) Handler.DEBUG = !Handler.DEBUG;
+    if(key == KeyEvent.VK_W) handler.setKey(0, Key.DOWN);
+    if(key == KeyEvent.VK_D) handler.setKey(3, Key.DOWN);
+    if(key == KeyEvent.VK_S) handler.setKey(2, Key.DOWN);
+    if(key == KeyEvent.VK_A) handler.setKey(1, Key.DOWN);
+    if(key == KeyEvent.VK_SPACE) handler.setKey(4, Key.DOWN);
+    if(key == KeyEvent.VK_F3) Game.gameInstance.DEBUG = !Game.gameInstance.DEBUG;
+    if(key == KeyEvent.VK_ESCAPE) Handler.exit();
   }
 }
