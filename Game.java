@@ -30,6 +30,7 @@ public class Game extends Canvas implements Runnable {
   public Dimension size = new Dimension(1000, 600);
   public MouseMotionInput mmi;
   public MouseInput mi;
+  public Camera camera;
 
   public final double GRAVITY = 0.3;
 
@@ -45,6 +46,7 @@ public class Game extends Canvas implements Runnable {
     window = new Window("Game", size, gameInstance, true);
 
     handler = new Handler();
+    camera = new Camera(0, 0);
     gui = new GUIHandler();
     mmi = new MouseMotionInput(handler);
     mi = new MouseInput();
@@ -117,6 +119,7 @@ public class Game extends Canvas implements Runnable {
       return;
     }
     Graphics g = bs.getDrawGraphics();
+    Graphics2D g2d = (Graphics2D) g;
     //////////////////////////////////
     ///////----DRAW IN HERE----///////
     //////////////////////////////////
@@ -125,7 +128,12 @@ public class Game extends Canvas implements Runnable {
     g.fillRect(0, 0, size.width, size.height);
     oldg = g;
 
+    g2d.translate(-camera.getX(), -camera.getY());
+
     handler.render(g);
+
+    g2d.translate(camera.getX(), camera.getY());
+
     gui.render(g);
 
     //////////////////////////////////
@@ -134,16 +142,21 @@ public class Game extends Canvas implements Runnable {
   }
 
   public void tick(){
+
+    for(int i = 0; i<handler.gameObjects.size(); i++){
+      if(handler.gameObjects.get(i).getID() == ID.BALL){
+        camera.tick(handler.gameObjects.get(i));
+      }
+    }
+
     handler.tick();
     gui.tick();
   }
 
   public void startGame(){
     background = new Color(160, 240, 240);
-    handler.addObject(new Wall(0, size.height-50, size.width, 50));
-    handler.addObject(new Wall(0, 0, size.width, 50));
-    handler.addObject(new Wall(0, 0, 100, size.height));
-    handler.addObject(new Wall(size.width-100, 0, 100, size.height));
+    handler.addObject(new Wall(0, 500, 3000, 50));
+    handler.addObject(new Wall(2000, 0, 50, 900));
     handler.addObject(new Ball(500, 200));
     MenuItem[] pauseMenu = {
       new MenuItem("Settings", Type.BUTTON, 2),

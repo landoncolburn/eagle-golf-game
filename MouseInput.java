@@ -11,10 +11,14 @@ public class MouseInput extends MouseAdapter{
   }
 
   public void mousePressed(MouseEvent e){
+    mousePos = e.getPoint();
+  }
+
+  public void mouseReleased(MouseEvent e){
+    mousePos = null;
   }
 
   public void mouseClicked(MouseEvent e){
-    mousePos = e.getPoint();
   }
 
   public Point getPoint(){
