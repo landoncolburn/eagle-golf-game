@@ -17,12 +17,16 @@ public class Ball extends GameObject{
 
   private Handler handler;
 
+  private double oldx, oldy;
+
   //Constructor
   public Ball(int x, int y){
     super(x, y, ID.BALL);
     sprite = Game.gameInstance.bil.loadImage("assets/ball.png");
     handler = Game.gameInstance.handler;
     handler.addObject(new StrengthMeter(x, y, this));
+    oldx = x;
+    oldy = y;
   }
 
   // Runs once each frame
@@ -38,6 +42,10 @@ public class Ball extends GameObject{
     if(forces.getX()==0&&forces.getY()==0){
       StrengthMeter.show();
       jumpable = true;
+    }
+
+    if(x>10000||x<-10000||y>5000||y<-5000){
+      respawn();
     }
 
     // Runs tick based methods
@@ -56,11 +64,6 @@ public class Ball extends GameObject{
       g.setColor(Color.RED);
       g.drawLine(getX()+10, getY()+10, (int)(getX()+10+-Math.cos(angle)*magnitude), (int)(getY()+10+-Math.sin(angle)*magnitude));
       g.drawRect(getX(), getY(), 20, 20);
-      // Ball Debug Menu
-      g.setColor(Color.WHITE);
-      g.drawString(("X: " + getX() + ", Y: " + getY()), 10, 40);
-      g.drawString(("Angle: " + angle + ", Magnitude: " + magnitude), 10, 60);
-      g.drawString(("Forces: ["+forces.getX()+", "+forces.getY()+"]"), 10, 80);
     }
   }
 
@@ -76,6 +79,8 @@ public class Ball extends GameObject{
 
     // Handles jumping triggers
     if(handler.getKey(4) == Key.UP && jumpable){
+      oldx = x;
+      oldy = y;
       forces.addAtAngle(-magnitude/4, angle);
       StrengthMeter.hide();
       jumpable = false;
@@ -94,6 +99,13 @@ public class Ball extends GameObject{
     } else if(handler.getKey(2) == Key.UP && magnitude>minStrength){
       magnitude += -1;
     }
+  }
+
+  public void respawn(){
+    forces.setY(0);
+    forces.setX(0);
+    x = oldx;
+    y = oldy;
   }
 
   // Getters and Setters

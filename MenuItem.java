@@ -3,7 +3,7 @@ import java.awt.*;
 public class MenuItem extends GameObject{
 
   private String name;
-  private int action;
+  private Action action;
   private Type type;
 
   private int w;
@@ -27,7 +27,7 @@ public class MenuItem extends GameObject{
     build();
   }
 
-  public MenuItem(String name, Type type, int action) {
+  public MenuItem(String name, Type type, Action action) {
     super(0, 0, ID.GUI);
     this.name = name;
     this.type = type;
@@ -53,18 +53,22 @@ public class MenuItem extends GameObject{
     this.name = name;
   }
 
-  public void setAction(int action){
+  public void setAction(Action action){
     this.action = action;
   }
 
   public void performAction(){
     switch(action){
-      case 0:
+      case EXIT:
         Handler.exit();
         break;
-      case 1:
+      case FULLSCREEN:
         Game.gameInstance.window.f.dispose();
         Game.gameInstance.window = new Window("Game", new Dimension(1000, 600), Game.gameInstance, false);
+        Game.gameInstance.gui.updateLayout();
+        break;
+      case RESPAWN:
+        Game.gameInstance.player.respawn();
         break;
       default:
         break;
@@ -105,10 +109,8 @@ public class MenuItem extends GameObject{
       if(type == Type.BUTTON){
         if(getFauxBounds().contains(Game.gameInstance.mmi.getPoint())){
           highlighted = true;
-          Game.gameInstance.setCursor(Game.cursors[1]);
         } else {
           highlighted = false;
-          Game.gameInstance.setCursor(Game.cursors[0]);
         }
         if(Game.gameInstance.mi.getPoint() != null && getFauxBounds().contains(Game.gameInstance.mi.getPoint())){
           performAction();
@@ -121,8 +123,10 @@ public class MenuItem extends GameObject{
     if(Game.gameInstance.paused){
       if(highlighted){
         g.setColor(Color.YELLOW);
+        Game.gameInstance.setCursor(Game.cursors[1]);
       } else {
         g.setColor(Color.WHITE);
+        Game.gameInstance.setCursor(Game.cursors[0]);
       }
       g.setFont(Game.fonts[1]);
       g.drawString(name, (int)x, (int)y+h);

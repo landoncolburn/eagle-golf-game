@@ -38,8 +38,8 @@ public class Game extends Canvas implements Runnable {
 
   public boolean DEBUG = false;
   public MenuItem menuItem;
-
   public Window window;
+  public Ball player;
 
   public Game(){
     gameInstance = this;
@@ -143,6 +143,8 @@ public class Game extends Canvas implements Runnable {
 
   public void tick(){
 
+    size = window.f.getSize();
+
     for(int i = 0; i<handler.gameObjects.size(); i++){
       if(handler.gameObjects.get(i).getID() == ID.BALL){
         camera.tick(handler.gameObjects.get(i));
@@ -157,13 +159,16 @@ public class Game extends Canvas implements Runnable {
     background = new Color(160, 240, 240);
     handler.addObject(new Wall(0, 500, 3000, 50));
     handler.addObject(new Wall(2000, 0, 50, 900));
-    handler.addObject(new Ball(500, 200));
+    player = new Ball(500, 200);
+    handler.addObject(player);
     MenuItem[] pauseMenu = {
-      new MenuItem("Settings", Type.BUTTON, 2),
-      new MenuItem("Main Menu", Type.BUTTON , 1),
-      new MenuItem("Exit Game", Type.BUTTON, 0),
+      new MenuItem("Respawn", Type.BUTTON, Action.RESPAWN),
+      new MenuItem("Settings", Type.BUTTON, Action.FULLSCREEN),
+      new MenuItem("Main Menu", Type.BUTTON , Action.SETTINGS),
+      new MenuItem("Exit Game", Type.BUTTON, Action.EXIT),
     };
     gui.addObject(new Menu("Paused", pauseMenu));
+    gui.addObject(new Debug(player));
 
   }
 

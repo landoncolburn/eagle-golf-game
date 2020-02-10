@@ -41,10 +41,6 @@ public class Handler {
     for(int i = 0; i < gameObjects.size(); i++){
       gameObjects.get(i).render(g);
     }
-    if(Game.gameInstance.DEBUG){
-      g.setColor(Color.WHITE);
-      g.drawString(("FPS: " + Game.gameInstance.fps), 10, 20);
-    }
   }
 
   // Calls each gameObjects tick method

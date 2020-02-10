@@ -51,8 +51,15 @@ public class Menu extends GameObject {
 
   public void autoLayout(){
     for(int i = 0; i<items.size(); i++){
+      items.get(i).build();
       items.get(i).setPos(new Point((Game.gameInstance.size.width-items.get(i).getWidth())/2, (int)y+200+(i*75)));
     }
+  }
+
+  public void updateLayout(){
+    this.x = (int)(Game.gameInstance.size.width-w)/2;
+    this.y = (int)(Game.gameInstance.size.height-h)/2;
+    autoLayout();
   }
 
   public void render(Graphics g){

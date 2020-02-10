@@ -28,4 +28,16 @@ public class GUIHandler {
       elements.get(i).tick();
     }
   }
+
+  public void updateLayout(){
+    for(GameObject g : elements){
+      if(g instanceof Menu){
+        Menu m = (Menu)g;
+        m.updateLayout();
+      } else if(g instanceof Debug){
+        Debug d = (Debug)g;
+        d.updateLayout();
+      }
+    }
+  }
 }
