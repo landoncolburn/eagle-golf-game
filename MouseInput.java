@@ -5,16 +5,12 @@ import java.awt.Point;
 
 public class MouseInput extends MouseAdapter{
 
-  private Handler handler;
   private Point mousePos;
 
-  public MouseInput(Handler handler){
-    this.handler = handler;
+  public MouseInput(){
   }
 
   public void mousePressed(MouseEvent e){
-    int mx = (int)(e.getX());
-    int my = (int)(e.getY());
   }
 
   public void mouseClicked(MouseEvent e){
@@ -23,6 +19,10 @@ public class MouseInput extends MouseAdapter{
 
   public Point getPoint(){
     return mousePos;
+  }
+
+  public void reset(){
+    mousePos = new Point(0,0);
   }
 
 }

@@ -8,11 +8,23 @@ public class Game extends Canvas implements Runnable {
 
   public static Game gameInstance;
   public Handler handler;
+  public GUIHandler gui;
 
   private BufferedImage studioLogo;
+  public static Font[] fonts = {
+    new Font("SansSerif", Font.PLAIN, 16),
+    new Font("SansSerif", Font.PLAIN, 24),
+    new Font("SansSerif", Font.PLAIN, 32),
+  };
+  public static Cursor[] cursors = {
+    new Cursor(Cursor.DEFAULT_CURSOR),
+    new Cursor(Cursor.HAND_CURSOR)
+  };
   private Thread thread;
-  private boolean isRunning = false;
+  public boolean isRunning = false;
+  public boolean paused = false;
   public int fps = 0;
+  public Graphics oldg;
 
   public BufferedImageLoader bil = new BufferedImageLoader();
   public Dimension size = new Dimension(1000, 600);
@@ -24,14 +36,18 @@ public class Game extends Canvas implements Runnable {
   public Color background = new Color(50, 50, 50);
 
   public boolean DEBUG = false;
+  public MenuItem menuItem;
+
+  public Window window;
 
   public Game(){
     gameInstance = this;
-    new Window("Game", size, gameInstance);
+    window = new Window("Game", size, gameInstance, true);
 
     handler = new Handler();
+    gui = new GUIHandler();
     mmi = new MouseMotionInput(handler);
-    mi = new MouseInput(handler);
+    mi = new MouseInput();
 
     handler.addObject(new Splashscreen());
 
@@ -107,8 +123,10 @@ public class Game extends Canvas implements Runnable {
 
     g.setColor(background);
     g.fillRect(0, 0, size.width, size.height);
+    oldg = g;
 
     handler.render(g);
+    gui.render(g);
 
     //////////////////////////////////
     g.dispose();
@@ -117,15 +135,22 @@ public class Game extends Canvas implements Runnable {
 
   public void tick(){
     handler.tick();
+    gui.tick();
   }
 
   public void startGame(){
     background = new Color(160, 240, 240);
-    handler.addObject(new Wall(0, size.height-100, size.width, 100));
-    handler.addObject(new Wall(0, 0, size.width, 100));
+    handler.addObject(new Wall(0, size.height-50, size.width, 50));
+    handler.addObject(new Wall(0, 0, size.width, 50));
     handler.addObject(new Wall(0, 0, 100, size.height));
     handler.addObject(new Wall(size.width-100, 0, 100, size.height));
     handler.addObject(new Ball(500, 200));
+    MenuItem[] pauseMenu = {
+      new MenuItem("Settings", Type.BUTTON, 2),
+      new MenuItem("Main Menu", Type.BUTTON , 1),
+      new MenuItem("Exit Game", Type.BUTTON, 0),
+    };
+    gui.addObject(new Menu("Paused", pauseMenu));
 
   }
 

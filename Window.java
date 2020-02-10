@@ -4,13 +4,15 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.Font;
+import java.awt.Cursor;
 
 public class Window{
 
+  public JFrame f;
   static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
-  
-  public Window(String title, Dimension size, Game game){
-    JFrame f = new JFrame(title);
+
+  public Window(String title, Dimension size, Game game, boolean fullscreen){
+    f = new JFrame(title);
     f.setPreferredSize(size);
     f.setMinimumSize(size);
     f.setMaximumSize(size);
@@ -25,7 +27,9 @@ public class Window{
     f.setFont(paintFont);
     f.getFontMetrics(paintFont);
 
-    device.setFullScreenWindow(f);
+    if(fullscreen){
+      device.setFullScreenWindow(f);
+    }
     Game.gameInstance.size = Toolkit.getDefaultToolkit().getScreenSize();
   }
 }

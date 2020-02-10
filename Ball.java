@@ -13,7 +13,7 @@ public class Ball extends GameObject{
   public int minStrength = 25;
 
   private boolean jumpable = false;
-  public boolean grounded = false;
+  public boolean isGround = false;
 
   private Handler handler;
 
@@ -28,7 +28,6 @@ public class Ball extends GameObject{
   // Runs once each frame
   public void tick(){
     // Gravity and Friction
-    forces.addY(0.3);
     forces.setX(forces.getX()*0.995);
 
     // Bounds velocity to numbers greater than 0.01
@@ -77,7 +76,7 @@ public class Ball extends GameObject{
 
     // Handles jumping triggers
     if(handler.getKey(4) == Key.UP && jumpable){
-      forces.addAtAngle(-magnitude/5, angle);
+      forces.addAtAngle(-magnitude/4, angle);
       StrengthMeter.hide();
       jumpable = false;
     }

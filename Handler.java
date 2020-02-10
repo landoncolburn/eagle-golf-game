@@ -4,7 +4,7 @@ import java.awt.*;
 public class Handler {
 
   // Main list containing all gameObjects
-  private LinkedList<GameObject> gameObjects;
+  public LinkedList<GameObject> gameObjects;
 
   // Boolean list to store keys pressed state
   private Key[] keys = {
@@ -49,8 +49,11 @@ public class Handler {
 
   // Calls each gameObjects tick method
   public void tick(){
-    for(int i = 0; i<gameObjects.size(); i++){
-      gameObjects.get(i).tick();
+    if(Game.gameInstance.paused){
+    } else {
+      for(int i = 0; i<gameObjects.size(); i++){
+        gameObjects.get(i).tick();
+      }
     }
   }
 
@@ -82,6 +85,7 @@ public class Handler {
 
   // Runs though collision detection for the ball
   public void collision(Ball ball){
+    ball.isGround = false;
     for(int i = 0; i < gameObjects.size(); i++) {
       GameObject tempObject = gameObjects.get(i);
       if(tempObject.getID() == ID.WALL){
@@ -90,9 +94,7 @@ public class Handler {
         }
         if(testPoint(Direction.SOUTH, (int)ball.forces.getY(), ball, tempObject.getBounds())){
           ball.forces.setY(-ball.forces.getY()/2);
-          if(ball.forces.getX()>0.01){
-            ball.forces.setX(ball.forces.getX()*0.85);
-          }
+          ball.isGround = true;
         }
         if(testPoint(Direction.EAST, (int)ball.forces.getX(), ball, tempObject.getBounds())){
           ball.forces.setX(-ball.forces.getX()*0.85);
@@ -101,6 +103,11 @@ public class Handler {
           ball.forces.setY(-ball.forces.getY()*0.85);
         }
       }
+    }
+    if(!ball.isGround){
+      ball.forces.addY(0.3);
+    } else {
+      ball.forces.setX(ball.forces.getX()*0.9);
     }
   }
 

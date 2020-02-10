@@ -27,6 +27,6 @@ public class KeyInput extends KeyAdapter {
     if(key == KeyEvent.VK_A) handler.setKey(1, Key.DOWN);
     if(key == KeyEvent.VK_SPACE) handler.setKey(4, Key.DOWN);
     if(key == KeyEvent.VK_F3) Game.gameInstance.DEBUG = !Game.gameInstance.DEBUG;
-    if(key == KeyEvent.VK_ESCAPE) Handler.exit();
+    if(key == KeyEvent.VK_ESCAPE) Game.gameInstance.paused = !Game.gameInstance.paused;
   }
 }
