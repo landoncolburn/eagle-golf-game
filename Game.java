@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.image.*;
 import java.awt.Event;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Game extends Canvas implements Runnable {
 
@@ -90,10 +93,11 @@ public class Game extends Canvas implements Runnable {
       lastTime = now;
       while (delta >= 1) {
         tick();
+        render();
         delta--;
       }
       if(isRunning)
-        render();
+        // render(); Temporary fix until interpolation can be implemented
       frames++;
       if(System.currentTimeMillis() - timer > 1000) {
         timer += 1000;
@@ -141,6 +145,10 @@ public class Game extends Canvas implements Runnable {
     bs.show();
   }
 
+  public double lerp(double a, double b, double f){
+    return (a * (1.0 - f)) + (b * f);
+  }
+
   public void tick(){
 
     size = window.f.getSize();
@@ -156,10 +164,9 @@ public class Game extends Canvas implements Runnable {
   }
 
   public void startGame(){
+    loadLevel();
     background = new Color(160, 240, 240);
-    handler.addObject(new Wall(0, 500, 3000, 50));
-    handler.addObject(new Wall(2000, 0, 50, 900));
-    player = new Ball(500, 200);
+    player = new Ball(75, 0);
     handler.addObject(player);
     MenuItem[] pauseMenu = {
       new MenuItem("Respawn", Type.BUTTON, Action.RESPAWN),
@@ -170,6 +177,20 @@ public class Game extends Canvas implements Runnable {
     gui.addObject(new Menu("Paused", pauseMenu));
     gui.addObject(new Debug(player));
 
+  }
+
+  public void loadLevel(){
+    try {
+      File lvl = new File("level1.lvl");
+      Scanner readLvl = new Scanner(lvl);
+      while(readLvl.hasNext()){
+        String[] arg = readLvl.next().split(",", 4);
+        handler.addObject(new Wall(Integer.parseInt(arg[0]), Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), Integer.parseInt(arg[3])));
+      }
+      readLvl.close();
+    } catch(FileNotFoundException e){
+      e.printStackTrace();
+    }
   }
 
   public static void main(String[] args) {

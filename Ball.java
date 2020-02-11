@@ -6,7 +6,7 @@ public class Ball extends GameObject{
   private BufferedImage sprite = null;
 
   public Vector2D forces = new Vector2D();
-  public double angle = 0;
+  public double angle = Math.PI;
   public int magnitude = 25;
 
   public int maxStrength = 90;
