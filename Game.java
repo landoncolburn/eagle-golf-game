@@ -166,8 +166,8 @@ public class Game extends Canvas implements Runnable {
   public void startGame(){
     loadLevel();
     background = new Color(160, 240, 240);
-    player = new Ball(75, 0);
-    handler.addObject(player);
+    // player = new Ball(400, 300);
+    // handler.addObject(player);
     MenuItem[] pauseMenu = {
       new MenuItem("Respawn", Type.BUTTON, Action.RESPAWN),
       new MenuItem("Settings", Type.BUTTON, Action.FULLSCREEN),
@@ -181,12 +181,15 @@ public class Game extends Canvas implements Runnable {
 
   public void loadLevel(){
     try {
-      File lvl = new File("level1.lvl");
+      File lvl = new File("level2.lvl");
       Scanner readLvl = new Scanner(lvl);
+      String[] spawn = readLvl.next().split(",", 2);
+      player = new Ball(Integer.parseInt(spawn[0]), Integer.parseInt(spawn[1]));
       while(readLvl.hasNext()){
         String[] arg = readLvl.next().split(",", 4);
         handler.addObject(new Wall(Integer.parseInt(arg[0]), Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), Integer.parseInt(arg[3])));
       }
+      handler.addObject(player);
       readLvl.close();
     } catch(FileNotFoundException e){
       e.printStackTrace();
