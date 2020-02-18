@@ -9,10 +9,12 @@ public class StrengthMeter extends GameObject{
 
   private BufferedImage sprite = null;
   private BufferedImage[] states = new BufferedImage[6];
+  private int w = 50;
+  private int h = 100;
 
   // Constructor
   public StrengthMeter(int x, int y, Ball parent){
-    super(x, y, ID.GUI);
+    super(x, y, ID.METER);
     this.parent = parent;
     for(int i = 0; i<6; i++){
       states[i] = Game.gameInstance.bil.loadImage("assets/meter/meter-"+i+".png");
@@ -50,14 +52,14 @@ public class StrengthMeter extends GameObject{
       AffineTransform newXform = (AffineTransform)(origXform.clone());
       newXform.rotate(parent.angle-Math.PI/2, x+25, y+120);
       g2d.setTransform(newXform);
-      g.drawImage(sprite, getX(), getY(), 50, 100, null);
+      g.drawImage(sprite, getX(), getY(), w, h, null);
       g2d.setTransform(origXform);
     }
   }
 
   // Returns hitbox for StrengthMeter (zero)
   public Rectangle getBounds(){
-    return new Rectangle(getX(), getY(), 0, 0);
+    return new Rectangle(getX(), getY(), w, h);
   }
 
 }

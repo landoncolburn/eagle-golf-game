@@ -3,5 +3,7 @@ public enum ID {
   SCREEN,
   GROUND,
   WALL,
+  FLAG,
+  METER,
   GUI;
 }

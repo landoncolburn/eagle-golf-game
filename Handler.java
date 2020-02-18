@@ -39,7 +39,9 @@ public class Handler {
   // Calls render method for each gameObject, and potentially renders debug screen
   public void render(Graphics g){
     for(int i = 0; i < gameObjects.size(); i++){
-      gameObjects.get(i).render(g);
+      if(gameObjects.get(i).getBounds().intersects(Game.gameInstance.camera.getBounds())){
+        gameObjects.get(i).render(g);
+      }
     }
   }
 
@@ -120,6 +122,14 @@ public class Handler {
   // Kills game
   public static void exit(){
     System.exit(0);
+  }
+
+  public String toString(){
+    String s = "";
+    for(GameObject o : gameObjects){
+      s+=o.getID()+", ";
+    }
+    return s;
   }
 
 }

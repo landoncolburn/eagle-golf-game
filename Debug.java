@@ -37,6 +37,8 @@ public class Debug extends GameObject{
       g.drawString(("X: " + px + ", Y: " + py), 10, 40);
       g.drawString(("Angle: " + a + ", Magnitude: " + m), 10, 60);
       g.drawString(("Forces: ["+pfx+", "+pfy+"]"), 10, 80);
+      g.drawString(("Entities: "+ Game.gameInstance.handler.toString()), 10, 100);
+      g.drawString(("Camera: " + Game.gameInstance.camera.getX() + ", " + Game.gameInstance.camera.getY()), 10, 120);
     }
   }
 

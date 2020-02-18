@@ -19,7 +19,7 @@ public class Ball extends GameObject{
 
   private double oldx, oldy;
 
-  //Constructor
+  // Constructor
   public Ball(int x, int y){
     super(x, y, ID.BALL);
     sprite = Game.gameInstance.bil.loadImage("assets/ball.png");
@@ -34,6 +34,11 @@ public class Ball extends GameObject{
     // Gravity and Friction
     forces.setX(forces.getX()*0.995);
 
+    if(getBounds().intersects(Game.gameInstance.flag.getBounds())){
+      forces.setX(0);
+      Game.gameInstance.unloadLevel();
+    }
+
     // Bounds velocity to numbers greater than 0.01
     if(forces.getY()<0.01 && forces.getY()>-0.01) forces.setY(0);
     if(forces.getX()<0.01 && forces.getX()>-0.01) forces.setX(0);
@@ -44,7 +49,7 @@ public class Ball extends GameObject{
       jumpable = true;
     }
 
-    if(x>10000||x<-10000||y>5000||y<-5000){
+    if(y>5000||y<-5000){
       respawn();
     }
 

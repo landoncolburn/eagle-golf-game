@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.image.*;
+import java.util.LinkedList;
 import java.awt.Event;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +13,9 @@ public class Game extends Canvas implements Runnable {
   public static Game gameInstance;
   public Handler handler;
   public GUIHandler gui;
+
+  private LinkedList<LevelData> levels = new LinkedList<LevelData>();
+  private int currentLvl = 0;
 
   private BufferedImage studioLogo;
   public static Font[] fonts = {
@@ -43,13 +47,14 @@ public class Game extends Canvas implements Runnable {
   public MenuItem menuItem;
   public Window window;
   public Ball player;
+  public Flag flag;
 
   public Game(){
     gameInstance = this;
     window = new Window("Game", size, gameInstance, true);
 
-    handler = new Handler();
     camera = new Camera(0, 0);
+    handler = new Handler();
     gui = new GUIHandler();
     mmi = new MouseMotionInput(handler);
     mi = new MouseInput();
@@ -164,36 +169,28 @@ public class Game extends Canvas implements Runnable {
   }
 
   public void startGame(){
-    loadLevel();
+    loadLevel("level"+currentLvl+".lvl");
     background = new Color(160, 240, 240);
-    // player = new Ball(400, 300);
-    // handler.addObject(player);
     MenuItem[] pauseMenu = {
       new MenuItem("Respawn", Type.BUTTON, Action.RESPAWN),
       new MenuItem("Settings", Type.BUTTON, Action.FULLSCREEN),
       new MenuItem("Main Menu", Type.BUTTON , Action.SETTINGS),
       new MenuItem("Exit Game", Type.BUTTON, Action.EXIT),
     };
-    gui.addObject(new Menu("Paused", pauseMenu));
+    gui.addObject(new Menu(levels.getFirst().getName(), pauseMenu));
     gui.addObject(new Debug(player));
 
   }
 
-  public void loadLevel(){
-    try {
-      File lvl = new File("level2.lvl");
-      Scanner readLvl = new Scanner(lvl);
-      String[] spawn = readLvl.next().split(",", 2);
-      player = new Ball(Integer.parseInt(spawn[0]), Integer.parseInt(spawn[1]));
-      while(readLvl.hasNext()){
-        String[] arg = readLvl.next().split(",", 4);
-        handler.addObject(new Wall(Integer.parseInt(arg[0]), Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), Integer.parseInt(arg[3])));
-      }
-      handler.addObject(player);
-      readLvl.close();
-    } catch(FileNotFoundException e){
-      e.printStackTrace();
-    }
+  public void loadLevel(String levelName){
+    levels.add(new LevelData(levelName));
+    handler.gameObjects.addAll(levels.get(currentLvl).getObjects());
+  }
+
+  public void unloadLevel(){
+    handler.gameObjects.clear();
+    currentLvl++;
+    loadLevel("level"+currentLvl+".lvl");
   }
 
   public static void main(String[] args) {

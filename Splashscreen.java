@@ -36,7 +36,9 @@ public class Splashscreen extends GameObject{
     }
   }
 
-  public Rectangle getBounds(){return null;}
+  public Rectangle getBounds(){
+    return new Rectangle(0, 0, Game.gameInstance.size.width, Game.gameInstance.size.height);
+  }
 
   public void render(Graphics g){
     Graphics2D g2 = (Graphics2D)g;
