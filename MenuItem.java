@@ -70,6 +70,9 @@ public class MenuItem extends GameObject{
       case RESPAWN:
         Game.gameInstance.player.respawn();
         break;
+      case NEXT_LEVEL:
+        Game.gameInstance.nextLevel();
+        break;
       default:
         break;
     }

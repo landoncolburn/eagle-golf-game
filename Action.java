@@ -3,5 +3,6 @@ public enum Action{
   SETTINGS,
   FULLSCREEN,
   RESPAWN,
+  NEXT_LEVEL,
   DEBUG;
 }

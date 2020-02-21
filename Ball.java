@@ -16,6 +16,7 @@ public class Ball extends GameObject{
   public boolean isGround = false;
 
   private Handler handler;
+  private StrengthMeter meter;
 
   private double oldx, oldy;
 
@@ -24,19 +25,21 @@ public class Ball extends GameObject{
     super(x, y, ID.BALL);
     sprite = Game.gameInstance.bil.loadImage("assets/ball.png");
     handler = Game.gameInstance.handler;
-    handler.addObject(new StrengthMeter(x, y, this));
     oldx = x;
     oldy = y;
   }
 
   // Runs once each frame
   public void tick(){
+    if(meter == null){
+      initalMeter();
+    }
     // Gravity and Friction
     forces.setX(forces.getX()*0.995);
 
     if(getBounds().intersects(Game.gameInstance.flag.getBounds())){
       forces.setX(0);
-      Game.gameInstance.unloadLevel();
+      Game.gameInstance.nextLevel();
     }
 
     // Bounds velocity to numbers greater than 0.01
@@ -79,6 +82,11 @@ public class Ball extends GameObject{
     y+=forces.getY();
   }
 
+  public void initalMeter(){
+    meter = new StrengthMeter(getX(), getY(), this);
+    handler.addObject(meter);
+  }
+
   // Handles all player based user input
   public void inputHandler(){
 
@@ -87,6 +95,7 @@ public class Ball extends GameObject{
       oldx = x;
       oldy = y;
       forces.addAtAngle(-magnitude/4, angle);
+      handler.setStroke(handler.getStroke()+1);
       StrengthMeter.hide();
       jumpable = false;
     }

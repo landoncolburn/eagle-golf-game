@@ -3,33 +3,41 @@ import java.awt.image.*;
 
 public class Splashscreen extends GameObject{
 
-  private BufferedImage[] studioLogo = new BufferedImage[10];
-  private BufferedImage activeLogo = null;
+  private BufferedImage studioLogo;
   int count = 0;
+  private float opacity = 0f;
 
   public Splashscreen(){
     super(0, 0, ID.SCREEN);
-    for(int i = 0; i<10; i++){
-      studioLogo[i] = Game.gameInstance.bil.loadImage("assets/studio/GameDesignLogo"+i+".png");
+    studioLogo = Game.gameInstance.bil.loadImage("assets/studio_logo.png");
+  }
+
+  public void opacity(float i){
+    if(i>0){
+      if(opacity+i<=100){
+        opacity+=i;
+      }
+    } else if(i<0){
+      if(opacity+i>=0){
+        opacity+=i;
+      }
     }
   }
 
   public void tick(){
-    if(count<320){
-      count+=2;
+    if(count<250){
+      count++;
     }
-    if(count < 44){
-      activeLogo = studioLogo[9-(int)((count)/5)];
-    }
-    else if(count > 44 && count < 200){
-      activeLogo = studioLogo[0];
-    }
-    else if(count>200 && count < 244){
-      activeLogo = studioLogo[(int)((count-200)/5)];
-    }
-    else if(count>244 && count < 300){
-      activeLogo = null;
-    } else if(count>300){
+
+    if(count < 50){
+      opacity(0.02f);
+    } else if(count > 50 && count < 150){
+
+    } else if(count > 150 && count < 200){
+      opacity(-0.02f);
+    } else if(count > 200 && count < 250){
+      opacity = 0;
+    } else if(count >= 250){
       Game.gameInstance.handler.addObject(new MainMenu());
       Game.gameInstance.handler.addObject(new Button(Game.gameInstance.size.width/2-150, 400));
       Game.gameInstance.handler.removeObject(this);
@@ -42,9 +50,10 @@ public class Splashscreen extends GameObject{
 
   public void render(Graphics g){
     Graphics2D g2 = (Graphics2D)g;
+    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
     g2.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
     g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-    g2.drawImage(activeLogo, Game.gameInstance.size.width/2-150, Game.gameInstance.size.height/2-45, null);
+    g2.drawImage(studioLogo, Game.gameInstance.size.width/2-150, Game.gameInstance.size.height/2-45, null);
   }
 
 }

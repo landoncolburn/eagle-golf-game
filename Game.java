@@ -17,7 +17,6 @@ public class Game extends Canvas implements Runnable {
   private LinkedList<LevelData> levels = new LinkedList<LevelData>();
   private int currentLvl = 0;
 
-  private BufferedImage studioLogo;
   public static Font[] fonts = {
     new Font("SansSerif", Font.PLAIN, 16),
     new Font("SansSerif", Font.PLAIN, 24),
@@ -44,7 +43,7 @@ public class Game extends Canvas implements Runnable {
   public Color background = new Color(50, 50, 50);
 
   public boolean DEBUG = false;
-  public MenuItem menuItem;
+  // public MenuItem menuItem;
   public Window window;
   public Ball player;
   public Flag flag;
@@ -87,7 +86,7 @@ public class Game extends Canvas implements Runnable {
   public void run() {
     this.requestFocus();
     long lastTime = System.nanoTime();
-    double amountOfTicks = 60.0;
+    double amountOfTicks = 65.0;
     double ns = 1000000000 / amountOfTicks;
     double delta = 0;
     long timer = System.currentTimeMillis();
@@ -97,13 +96,11 @@ public class Game extends Canvas implements Runnable {
       delta += (now - lastTime) / ns;
       lastTime = now;
       while (delta >= 1) {
+        frames++;
         tick();
         render();
         delta--;
       }
-      if(isRunning)
-        // render(); Temporary fix until interpolation can be implemented
-      frames++;
       if(System.currentTimeMillis() - timer > 1000) {
         timer += 1000;
         System.out.println("FPS: " + frames);
@@ -175,6 +172,7 @@ public class Game extends Canvas implements Runnable {
       new MenuItem("Respawn", Type.BUTTON, Action.RESPAWN),
       new MenuItem("Settings", Type.BUTTON, Action.FULLSCREEN),
       new MenuItem("Main Menu", Type.BUTTON , Action.SETTINGS),
+      new MenuItem("Skip Level", Type.BUTTON , Action.NEXT_LEVEL),
       new MenuItem("Exit Game", Type.BUTTON, Action.EXIT),
     };
     gui.addObject(new Menu(levels.getFirst().getName(), pauseMenu));
@@ -187,10 +185,22 @@ public class Game extends Canvas implements Runnable {
     handler.gameObjects.addAll(levels.get(currentLvl).getObjects());
   }
 
+  public void nextLevel(){
+    gui.addObject(new Animation(Animations.SUCCESS));
+    unloadLevel();
+    currentLvl++;
+    if(currentLvl<3){
+      loadLevel("level"+currentLvl+".lvl");
+    }
+  }
+
   public void unloadLevel(){
     handler.gameObjects.clear();
-    currentLvl++;
-    loadLevel("level"+currentLvl+".lvl");
+    handler.setStroke(0);
+  }
+
+  public String getLevelName(){
+    return levels.get(currentLvl).getName();
   }
 
   public static void main(String[] args) {

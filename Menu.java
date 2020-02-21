@@ -56,6 +56,10 @@ public class Menu extends GameObject {
     }
   }
 
+  public void setTitle(String s){
+    this.title = s;
+  }
+
   public void updateLayout(){
     this.x = (int)(Game.gameInstance.size.width-w)/2;
     this.y = (int)(Game.gameInstance.size.height-h)/2;
@@ -64,6 +68,7 @@ public class Menu extends GameObject {
 
   public void render(Graphics g){
     if(Game.gameInstance.paused){
+      setTitle(Game.gameInstance.getLevelName());
       g.setColor(new Color(0, 0, 0, 175));
       g.fillRect((int)x, (int)y, w, h);
       g.setFont(Game.fonts[2]);

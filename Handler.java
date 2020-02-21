@@ -6,14 +6,19 @@ public class Handler {
   // Main list containing all gameObjects
   public LinkedList<GameObject> gameObjects;
 
+  public int strokes = 0;
+
   // Boolean list to store keys pressed state
   private Key[] keys = {
-    Key.DOWN, //W
-    Key.DOWN, //A
-    Key.DOWN, //S
-    Key.DOWN, //D
-    Key.DOWN, //Space
-    Key.DOWN //F3
+    Key.DOWN, //W (0)
+    Key.DOWN, //A (1)
+    Key.DOWN, //S (2)
+    Key.DOWN, //D (3)
+    Key.DOWN, //Space (4)
+    Key.DOWN, //UP (5)
+    Key.DOWN, //DOWN (6)
+    Key.DOWN, //LEFT (7)
+    Key.DOWN, //RIGHT (8)
   };
 
   // Constuctor
@@ -43,6 +48,16 @@ public class Handler {
         gameObjects.get(i).render(g);
       }
     }
+  }
+
+  //Adds another stoke to total per course
+  public void setStroke(int i){
+    strokes = i;
+  }
+
+  //Gets stroke count
+  public int getStroke(){
+    return strokes;
   }
 
   // Calls each gameObjects tick method
