@@ -96,6 +96,7 @@ public class Ball extends GameObject{
       oldy = y;
       forces.addAtAngle(-magnitude/4, angle);
       handler.setStroke(handler.getStroke()+1);
+      System.out.println(handler.getStroke());
       StrengthMeter.hide();
       jumpable = false;
     }

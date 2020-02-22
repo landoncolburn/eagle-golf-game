@@ -1,23 +1,26 @@
 import java.awt.*;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 
-public class Template extends GameObject{
+public class Template extends GameObject {
+
+  private int w,h;
 
   private BufferedImage sprite = null;
 
   public Template(int x, int y){
-    super(x, y);
+    super(x, y, ID.TEMPLATE);
   }
 
   public void tick(){
 
   }
 
-  public Rectangle getBounds(){
-    return new Rectangle(getX(), getY(), 0, 0);
+  public void render(Graphics g){
+
   }
 
-  public void render(Graphics g){
+  public Rectangle getBounds(){
+    return new Rectangle(getX(), getY(), w, h);
   }
 
 }

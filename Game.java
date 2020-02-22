@@ -177,19 +177,41 @@ public class Game extends Canvas implements Runnable {
     };
     gui.addObject(new Menu(levels.getFirst().getName(), pauseMenu));
     gui.addObject(new Debug(player));
+    gui.addObject(new Counter(168, 99));
 
   }
 
   public void loadLevel(String levelName){
     levels.add(new LevelData(levelName));
     handler.gameObjects.addAll(levels.get(currentLvl).getObjects());
+    handler.par = levels.get(currentLvl).getPar();
   }
 
   public void nextLevel(){
-    gui.addObject(new Animation(Animations.SUCCESS));
+    int stroke = handler.strokes;
+    int par = handler.par;
+    if(stroke == 1){
+      gui.addObject(new Animation(Animations.HOLE_IN_ONE));
+    } else if(par-stroke==3){ //ALBATROSS
+      gui.addObject(new Animation(Animations.ALBATROSS));
+    } else if(par-stroke==2){ //EAGLE
+      gui.addObject(new Animation(Animations.EAGLE));
+    } else if(par-stroke==1){ //BIRDIE
+      gui.addObject(new Animation(Animations.BIRDIE));
+    } else if(stroke == par){ //PAR
+      gui.addObject(new Animation(Animations.PAR));
+    } else if(par-stroke==-1){ //BOGEY
+      gui.addObject(new Animation(Animations.BOGEY));
+    } else if(par-stroke==-2){ //DOUBLE BOGEY
+      gui.addObject(new Animation(Animations.DOUBLE_BOGEY));
+    } else if(stroke > par){ //FAIL
+      gui.addObject(new Animation(Animations.FAIL));
+    } else if(stroke < par){ //SUCCESS
+      gui.addObject(new Animation(Animations.SUCCESS));
+    }
     unloadLevel();
     currentLvl++;
-    if(currentLvl<3){
+    if(currentLvl<4){
       loadLevel("level"+currentLvl+".lvl");
     }
   }
@@ -200,7 +222,11 @@ public class Game extends Canvas implements Runnable {
   }
 
   public String getLevelName(){
-    return levels.get(currentLvl).getName();
+    if(currentLvl <= levels.size()-1){
+      return levels.get(currentLvl).getName();
+    } else {
+      return "Invalid Level";
+    }
   }
 
   public static void main(String[] args) {

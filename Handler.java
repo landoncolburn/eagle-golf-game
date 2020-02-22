@@ -7,6 +7,7 @@ public class Handler {
   public LinkedList<GameObject> gameObjects;
 
   public int strokes = 0;
+  public int par = 0;
 
   // Boolean list to store keys pressed state
   private Key[] keys = {

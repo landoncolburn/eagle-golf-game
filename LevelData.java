@@ -7,6 +7,7 @@ public class LevelData {
   private String name;
   private int[] spawn = new int[2];
   private int[] flag = new int[2];
+  private int par;
   private LinkedList<Wall> walls = new LinkedList<Wall>();
 
   public LevelData(String file){
@@ -20,6 +21,7 @@ public class LevelData {
     try {
       Scanner readLvl = new Scanner(file);
       name = readLvl.nextLine();
+      par = Integer.parseInt(readLvl.nextLine());
       String[] tspawn = readLvl.nextLine().split(",", 2);
       spawn[0] = Integer.parseInt(tspawn[0]);
       spawn[1] = Integer.parseInt(tspawn[1]);
@@ -48,5 +50,9 @@ public class LevelData {
 
   public String getName(){
     return this.name;
+  }
+
+  public int getPar(){
+    return par;
   }
 }
